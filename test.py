@@ -21,6 +21,13 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
 }
 
+# 加载class匹配内容
+
+# 加载match_content数据
+with open("class_match_content.json", "r",encoding="UTF-8") as file:
+    class_match_content = json.load(file)
+
+
 @app.route('/')
 def Error():
     return '404 Not Found'
@@ -30,8 +37,8 @@ def Error():
 def get_subject(subject_id):
     url = f'https://api.bgm.tv/v0/subjects/{subject_id}'
     proxy = {
-        'http': 'http://127.0.0.1:7890',
-        'https': 'https://127.0.0.1:7890'
+        'http': 'http://127.0.0.1:10809',
+        # 'https': 'https://127.0.0.1:0809'
     }
     response = requests.get(url, proxies=proxy,headers = headers)
     #print(f"响应内容: {response.text}\n")
@@ -78,6 +85,18 @@ def get_subject(subject_id):
     new_date_format = date_obj.strftime("%Y-%m-%d")
     out_vod_year = date_obj.strftime("%Y")
 
+    tags_string=""
+    class_string = ""
+    # 写入tags 和匹配的class
+    for i in parsed_json["tags"]:
+        tags_string  += f'{i.get("name")}, '
+        if i.get("name") in class_match_content:
+            class_string += f'{i.get("name")}, '
+    # 去除最后一个逗号
+    tags_string  = tags_string.rstrip(", ")
+    class_string = class_string.rstrip(", ")
+
+
     if parsed_json["name_cn"] in [""]:
         out_vod_name=parsed_json["name"]
     else: 
@@ -93,16 +112,16 @@ def get_subject(subject_id):
             "vod_lang": "",
             "vod_area": "",
             "vod_state": "",
-            "vod_total": parsed_json["rating"]["score"],
+            "vod_total": parsed_json["total_episodes"],
             "vod_serial": "",
             "vod_isend": 1,
-            "vod_class": "",
-            "vod_tag": "",
+            "vod_class": class_string,
+            "vod_tag": tags_string,
             "vod_actor": out_vod_actor,
             "vod_director": out_vod_director,
             "vod_pubdate": new_date_format,
             "vod_writer": "",
-            "vod_score": "",
+            "vod_score": parsed_json["rating"]["score"],
             "vod_score_num": "",
             "vod_douban_score": "",
             "vod_duration": "",
