@@ -1,0 +1,33 @@
+{
+	"code": 1,
+	"tip": "本接口来自api.maccms.la仅供内部测试交流，请勿非法调用！",
+	"msg": "获取成功",
+	"data": {
+		"vod_name": "小林家的龙女仆S 小林さんちのメイドラゴンS",
+		"vod_sub": "小林家的妹抖龙S \/ 小林家的龙女仆 第二季",
+		"vod_pic": "https:\/\/img9.doubanio.com\/view\/photo\/s_ratio_poster\/public\/p2655536384.jpg",
+		"vod_year": "2021",
+		"vod_lang": "日语",
+		"vod_area": "日本",
+		"vod_state": "正片",
+		"vod_total": 12,
+		"vod_serial": "",
+		"vod_isend": 1,
+		"vod_class": "喜剧,动画",
+		"vod_tag": "",
+		"vod_actor": "田村睦心,桑原由气,长绳麻理亚,高田忧希,高桥未奈美,加藤英美里",
+		"vod_director": "武本康弘,石原立也,北之原孝将,山村卓也,小川太一",
+		"vod_pubdate": "2021-07-07",
+		"vod_writer": "酷教信者,山田由香,志茂文彦",
+		"vod_score": "8.9",
+		"vod_score_num": "18428",
+		"vod_score_all": 164009,
+		"vod_douban_score": "8.9",
+		"vod_duration": "24分钟",
+		"vod_reurl": "https:\/\/movie.douban.com\/subject\/30459061\/",
+		"vod_author": "豆瓣",
+		"vod_content": "主人公小林是一位女性系统工程师，某天她喝酒喝的很醉兴冲冲的跑到了山上遇到了一头龙，酒醉之下的小林对着龙大倒苦水。听到龙说自己无家可归时，小林趁着酒意开玩笑的说“那你就来我家吧”，之后龙真的就跑到小林的家里，并且还变成了一位女仆——于是一位龙女仆和小林的同居生活就这样开始了……",
+		"vod_douban_id": 30459061,
+		"rest_cache_time": "2023-09-03 02:25:40"
+	}
+}
