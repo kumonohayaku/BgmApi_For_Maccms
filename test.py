@@ -89,9 +89,9 @@ def get_subject(subject_id):
     class_string = ""
     # 写入tags 和匹配的class
     for i in parsed_json["tags"]:
-        tags_string  += f'{i.get("name")}, '
+        tags_string  += f'{i.get("name")},'
         if i.get("name") in class_match_content:
-            class_string += f'{i.get("name")}, '
+            class_string += f'{i.get("name")},'
     # 去除最后一个逗号
     tags_string  = tags_string.rstrip(", ")
     class_string = class_string.rstrip(", ")
