@@ -123,7 +123,8 @@ def process_json(parsed_json,characters_json,callbackurl):
     #写入声优名字
     actors_string = ""
     for i in characters_json:
-        actors_string+= f'{i.get("actors")[0].get("name")},'
+        for ii in i.get("actors"):
+            actors_string+= f'{ii.get("name")},'
     # 去除最后一个逗号
     actors_string = actors_string.rstrip(",")
 
