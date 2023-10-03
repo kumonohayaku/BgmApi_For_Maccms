@@ -79,23 +79,29 @@ def process_json(parsed_json,characters_json,callbackurl):
             #print(out_vod_director)
         if item['key'] == '别名':
             out_vod_sub = item['value']
-            print(out_vod_sub)
+            # print(out_vod_sub)
             values = [] 
             try:
                 v_list = out_vod_sub  # 获取json中"value"对应的列表
                 for v_dict in v_list:
-                    value = v_dict.get("v")  # 获取每个字典中"v"对应的值
-                    if value:
-                        values.append(value)  # 将值添加到新的列表中
+                    
+                    if type(v_dict) is dict:
+                        # print("是字典正常获取")
+                        value = v_dict.get("v")  # 获取每个字典中"v"对应的值
+                        if value:
+                            values.append(value)  # 将值添加到新的列表中
+                        else:
+                            values.append("")  # 如果value为空，则添加空字符串到新的列表中
                     else:
-                        values.append("")  # 如果value为空，则添加空字符串到新的列表中
-                        
+                        formatted_data=out_vod_sub
+                        # print("不是字典")
+                        # print(out_vod_sub)
             except KeyError:
                 print("v对应的值不存在")
-
-            print(values)  # 打印所有获取到的值
-            formatted_data = " / ".join(values)
-            print(formatted_data)
+            if type(v_dict) is dict:
+                # print(values)  # 打印所有获取到的值
+                formatted_data = " / ".join(values)
+                # print(formatted_data)
 
     #日期转换
     date_obj = datetime.datetime.strptime(year, "%Y年%m月%d日")
@@ -130,7 +136,7 @@ def process_json(parsed_json,characters_json,callbackurl):
     match = re.search(pattern, callbackurl)
     if match:
         callback = match.group(1)
-        print(callback)
+        # print(callback)
     else:
         print("未找到匹配的部分")
         callback=""
