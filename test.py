@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import re
 from flask import Flask, request, jsonify
 
 
@@ -34,6 +35,7 @@ def Error():
 
 @app.route('/v0/subjects/<subject_id>')
 def get_subject(subject_id):
+    callbackurl = request.url
     url = f'https://api.bgm.tv/v0/subjects/{subject_id}'
     proxy = {
         'http': 'http://127.0.0.1:10809',
@@ -57,10 +59,10 @@ def get_subject(subject_id):
         load_son_str = json.dumps(response.json())
         characters_json = json.loads(load_son_str)
 
-    return process_json(parsed_json,characters_json)
+    return process_json(parsed_json,characters_json,callbackurl)
 
 # 处理json 数据
-def process_json(parsed_json,characters_json):
+def process_json(parsed_json,characters_json,callbackurl):
     #赋空值防止报错
     formatted_data=''
     out_vod_director=''
@@ -123,6 +125,16 @@ def process_json(parsed_json,characters_json):
     else: 
         out_vod_name=parsed_json["name_cn"]
 
+    # 使用正则表达式提取指定部分)
+    pattern = r"callback=(.*?)&"
+    match = re.search(pattern, callbackurl)
+    if match:
+        callback = match.group(1)
+        print(callback)
+    else:
+        print("未找到匹配的部分")
+        callback=""
+
     output_json = {
         "code": 1,
         "data": {
@@ -130,8 +142,8 @@ def process_json(parsed_json,characters_json):
             "vod_sub": formatted_data,
             "vod_pic": parsed_json["images"]["large"],
             "vod_year": out_vod_year,
-            "vod_lang": "",
-            "vod_area": "",
+            "vod_lang": "日语",
+            "vod_area": "日本",
             "vod_state": "",
             "vod_total": parsed_json["total_episodes"],
             "vod_serial": "",
@@ -151,8 +163,9 @@ def process_json(parsed_json,characters_json):
             "vod_content": parsed_json["summary"]
         }
     }
-
-    return jsonify(output_json)
+    output_json_string = callback + '(' + str(output_json) + ');'
+    #print(output_json_string)
+    return (output_json_string)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0',port=5000)
