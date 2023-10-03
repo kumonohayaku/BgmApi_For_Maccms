@@ -22,7 +22,6 @@ headers = {
 }
 
 # 加载class匹配内容
-
 # 加载match_content数据
 with open("class_match_content.json", "r",encoding="UTF-8") as file:
     class_match_content = json.load(file)
@@ -45,7 +44,23 @@ def get_subject(subject_id):
     if response.status_code == 200:
         load_son_str = json.dumps(response.json())
         parsed_json = json.loads(load_son_str)
+    
+    #获取角色信息
+    url = f'https://api.bgm.tv/v0/subjects/{subject_id}/characters'
+    proxy = {
+        'http': 'http://127.0.0.1:10809',
+        # 'https': 'https://127.0.0.1:0809'
+    }
+    response = requests.get(url, proxies=proxy,headers = headers)
+    #print(f"响应内容: {response.text}\n")
+    if response.status_code == 200:
+        load_son_str = json.dumps(response.json())
+        characters_json = json.loads(load_son_str)
 
+    return process_json(parsed_json,characters_json)
+
+# 处理json 数据
+def process_json(parsed_json,characters_json):
     #赋空值防止报错
     formatted_data=''
     out_vod_director=''
@@ -85,17 +100,23 @@ def get_subject(subject_id):
     new_date_format = date_obj.strftime("%Y-%m-%d")
     out_vod_year = date_obj.strftime("%Y")
 
+    # 写入tags 和匹配的class
     tags_string=""
     class_string = ""
-    # 写入tags 和匹配的class
     for i in parsed_json["tags"]:
         tags_string  += f'{i.get("name")},'
         if i.get("name") in class_match_content:
             class_string += f'{i.get("name")},'
     # 去除最后一个逗号
-    tags_string  = tags_string.rstrip(", ")
-    class_string = class_string.rstrip(", ")
+    tags_string  = tags_string.rstrip(",")
+    class_string = class_string.rstrip(",")
 
+    #写入声优名字
+    actors_string = ""
+    for i in characters_json:
+        actors_string+= f'{i.get("actors")[0].get("name")},'
+    # 去除最后一个逗号
+    actors_string = actors_string.rstrip(",")
 
     if parsed_json["name_cn"] in [""]:
         out_vod_name=parsed_json["name"]
@@ -117,7 +138,7 @@ def get_subject(subject_id):
             "vod_isend": 1,
             "vod_class": class_string,
             "vod_tag": tags_string,
-            "vod_actor": out_vod_actor,
+            "vod_actor": actors_string,
             "vod_director": out_vod_director,
             "vod_pubdate": new_date_format,
             "vod_writer": "",
