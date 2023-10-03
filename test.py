@@ -66,16 +66,17 @@ def process_json(parsed_json,characters_json,callbackurl):
     #赋空值防止报错
     formatted_data=''
     out_vod_director=''
+    out_vod_writer=''
 
     for item in parsed_json["infobox"]:
         if item['key'] == '放送开始':
             year = item['value']
             #print(out_vod_pubdate)
         if item['key'] == '导演':
-            out_vod_actor = item['value']
+            out_vod_director = item['value']
             #print(out_vod_actor)
         if item['key'] == '系列构成':
-            out_vod_director = item['value']
+            out_vod_writer = item['value']
             #print(out_vod_director)
         if item['key'] == '别名':
             out_vod_sub = item['value']
@@ -159,7 +160,7 @@ def process_json(parsed_json,characters_json,callbackurl):
             "vod_actor": actors_string,
             "vod_director": out_vod_director,
             "vod_pubdate": new_date_format,
-            "vod_writer": "",
+            "vod_writer": out_vod_writer,
             "vod_score": parsed_json["rating"]["score"],
             "vod_score_num": "",
             "vod_douban_score": "",
