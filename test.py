@@ -61,6 +61,13 @@ def get_subject(subject_id):
 
     return process_json(parsed_json,characters_json,callbackurl)
 
+def check_date_format(year):
+    try:
+        datetime.datetime.strptime(year, "%Y-%m-%d")
+        return True
+    except ValueError:
+        return False
+
 # 处理json 数据
 def process_json(parsed_json,characters_json,callbackurl):
     #赋空值防止报错
@@ -70,6 +77,9 @@ def process_json(parsed_json,characters_json,callbackurl):
 
     for item in parsed_json["infobox"]:
         if item['key'] == '放送开始':
+            year = item['value']
+            #print(out_vod_pubdate)
+        if item['key'] == '上映年度':
             year = item['value']
             #print(out_vod_pubdate)
         if item['key'] == '导演':
@@ -105,9 +115,17 @@ def process_json(parsed_json,characters_json,callbackurl):
                 # print(formatted_data)
 
     #日期转换
-    date_obj = datetime.datetime.strptime(year, "%Y年%m月%d日")
-    new_date_format = date_obj.strftime("%Y-%m-%d")
-    out_vod_year = date_obj.strftime("%Y")
+    if check_date_format(year):
+        #print("日期格式为Y-M-D")
+        date_obj =datetime.datetime.strptime(year, "%Y-%m-%d")
+        out_vod_year = date_obj.strftime("%Y")
+        new_date_format=year
+
+    else:
+        #print("日期格式不符合Y-M-D")      
+        date_obj = datetime.datetime.strptime(year, "%Y年%m月%d日")
+        new_date_format = date_obj.strftime("%Y-%m-%d")
+        out_vod_year = date_obj.strftime("%Y")
 
     # 写入tags 和匹配的class
     tags_string=""
